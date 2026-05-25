@@ -1,7 +1,7 @@
 package in.shantanupatil.searchservice.controller;
 
 import in.shantanupatil.searchservice.model.PlacesSearchDto;
-import in.shantanupatil.searchservice.service.SearchService;
+import in.shantanupatil.searchservice.service.AsyncSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,18 +10,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-@Profile({"baseline", "retry"})
-public class SearchController {
+@Profile("retry-async")
+public class AsyncSearchController {
 
-    private final SearchService searchService;
+    private final AsyncSearchService asyncSearchService;
 
-    @GetMapping("/search")
-    public List<PlacesSearchDto> search(@RequestParam String query) {
-        return searchService.search(query);
+    @GetMapping("/search/async")
+    public CompletableFuture<List<PlacesSearchDto>> searchAsync(@RequestParam String query) {
+        return asyncSearchService.searchAsync(query);
     }
-
 }
