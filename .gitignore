@@ -1,0 +1,10 @@
+#Java / Spring Boot
+target/
+build/
+out/
+
+#Maven
+.mvn/wrapper/maven-wrapper.jar
+
+#MacOS
+.DS_Store
