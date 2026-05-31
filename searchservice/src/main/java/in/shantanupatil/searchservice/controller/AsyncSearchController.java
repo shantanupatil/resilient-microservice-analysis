@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-@Profile({"retry-async", "bulkhead"})
+@Profile({"retry-async", "bulkhead", "bulkhead-with-retry-timeout"})
 public class AsyncSearchController {
 
     private final AsyncSearchService asyncSearchService;
