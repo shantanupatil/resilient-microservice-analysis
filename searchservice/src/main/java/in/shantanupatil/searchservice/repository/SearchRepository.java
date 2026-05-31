@@ -12,4 +12,10 @@ public interface SearchRepository extends JpaRepository<PlacesSearchEntity, Long
             SELECT * FROM places_search WHERE name ILIKE CONCAT(:query, '%') LIMIT 1000
         """, nativeQuery = true)
     List<PlacesSearchEntity> search(String query);
+
+    @Query(value = """
+
+            SELECT * FROM places_search WHERE name_vector @@ plainto_tsquery('simple', :query) LIMIT 1000;
+        """, nativeQuery = true)
+    List<PlacesSearchEntity> searchFullText(String query);
 }

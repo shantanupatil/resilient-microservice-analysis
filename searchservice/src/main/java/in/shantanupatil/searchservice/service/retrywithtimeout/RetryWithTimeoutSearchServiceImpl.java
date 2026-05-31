@@ -43,6 +43,19 @@ public class RetryWithTimeoutSearchServiceImpl implements AsyncSearchService {
         }, searchExecutor);
     }
 
+    @Retry(name = "searchRetry", fallbackMethod = "fallbackSearchResponse")
+    @TimeLimiter(name = "searchTimeout")
+    @Override
+    public CompletableFuture<List<PlacesSearchDto>> searchAsyncFullText(String query) {
+        return CompletableFuture.supplyAsync(() -> {
+            makeRequestSlow();
+            List<PlacesSearchEntity> placesSearchEntities = searchRepository.searchFullText(query);
+            return placesSearchEntities.stream()
+                    .map(MapperUtils::toPlacesSearchDto)
+                    .toList();
+        }, searchExecutor);
+    }
+
     private void makeRequestSlow() {
         if (random.nextInt(100) < 50) {
             try {
@@ -54,13 +67,13 @@ public class RetryWithTimeoutSearchServiceImpl implements AsyncSearchService {
     }
 
     private CompletableFuture<List<PlacesSearchDto>> fallbackSearchResponse(String query, Exception exception) {
-        return CompletableFuture.supplyAsync(() -> List.of(
+        return CompletableFuture.completedFuture(List.of(
                 new PlacesSearchDto(
                         -1L,
                         "Fallback Response for " + query,
                         -1L,
                         "System temporarily degraded"
                 )
-        ), searchExecutor);
+        ));
     }
 }

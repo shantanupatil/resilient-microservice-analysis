@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-@Profile("retry-async")
+@Profile({"retry-async", "bulkhead"})
 public class AsyncSearchController {
 
     private final AsyncSearchService asyncSearchService;
@@ -23,5 +23,10 @@ public class AsyncSearchController {
     @GetMapping("/search/async")
     public CompletableFuture<List<PlacesSearchDto>> searchAsync(@RequestParam String query) {
         return asyncSearchService.searchAsync(query);
+    }
+
+    @GetMapping("/search/async/fulltext")
+    public CompletableFuture<List<PlacesSearchDto>> searchAsyncFullText(@RequestParam String query) {
+        return asyncSearchService.searchAsyncFullText(query);
     }
 }

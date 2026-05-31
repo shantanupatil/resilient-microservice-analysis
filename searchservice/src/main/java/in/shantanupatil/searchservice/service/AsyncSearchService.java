@@ -7,4 +7,6 @@ import java.util.concurrent.CompletableFuture;
 
 public interface AsyncSearchService {
     CompletableFuture<List<PlacesSearchDto>> searchAsync(String query);
+
+    CompletableFuture<List<PlacesSearchDto>> searchAsyncFullText(String query);
 }
